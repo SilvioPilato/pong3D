@@ -1,5 +1,4 @@
 export class BallMovementSystem {
-
     opponentTag = null;
     ballTag = null;
     playerTag = null;

@@ -1,4 +1,4 @@
-import {KeyboardHandler} from "./KeyboardHandler.js";
+import {KeyboardHandler} from "../KeyboardHandler.js";
 
 export class PlayerMovementSystem {
     playerTag = null;

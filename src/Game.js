@@ -1,10 +1,10 @@
-import {Box3, Box3Helper, Clock, Scene, Vector3} from "three";
+import {Box3, Clock, Scene, Vector3} from "three";
 import {KeyboardHandler} from "./KeyboardHandler.js";
-import {AISystem} from "./AISystem.js";
-import {BallMovementSystem} from "./BallMovementSystem.js";
-import {ScoreSystem} from "./ScoreSystem.js";
-import {PlayerMovementSystem} from "./PlayerMovementSystem.js";
-import {ColliderUpdateSystem} from "./ColliderUpdateSystem.js";
+import {AISystem} from "./Systems/AISystem.js";
+import {BallMovementSystem} from "./Systems/BallMovementSystem.js";
+import {ScoreSystem} from "./Systems/ScoreSystem.js";
+import {PlayerMovementSystem} from "./Systems/PlayerMovementSystem.js";
+import {ColliderUpdateSystem} from "./Systems/ColliderUpdateSystem.js";
 export class Game {
     renderer = null;
     scene = null;
