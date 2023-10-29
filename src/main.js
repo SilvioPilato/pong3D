@@ -130,7 +130,6 @@ const onFontLoad = (font) => {
 
 const onCourtLoad = (gltf) => {
     const court = gltf.scene.children[0];
-    console.log(court.material)
     court.rotateOnAxis(new Vector3(1, 0,0), degToRad(90));
     court.receiveShadow = true;
     court.castShadow = false;
