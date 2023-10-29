@@ -11,9 +11,8 @@ import {
 } from 'three';
 import {degToRad} from "three/src/math/MathUtils.js";
 import {Game} from "./Game.js";
-import {FontLoader} from "three/addons/loaders/FontLoader.js";
 import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
-const loader = new FontLoader();
+import {LoadFont, LoadGLTF} from "./Loaders.js";
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 const renderer = new WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -21,6 +20,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = PCFShadowMap;
 
 const game = new Game(renderer, camera);
+
 const ballColor = "#FAB139"
 const wallColor = "#719972";
 const outsideColor = "#4087BB";
@@ -34,9 +34,10 @@ const sphere = new Mesh(sphereGeometry, sMat);
 
 const outsideGeometry = new PlaneGeometry(10000, 10000, 10, 10);
 const courtGeometry = new PlaneGeometry(courtWidth, courtHeight, 10, 10);
+
 const outMat = new MeshStandardMaterial({color: outsideColor});
-const courtMat = new MeshStandardMaterial({color: courtColor});
 const outside = new Mesh(outsideGeometry, outMat);
+const courtMat = new MeshStandardMaterial({color: courtColor});
 const court = new Mesh(courtGeometry, courtMat);
 
 const cGeometry = new CapsuleGeometry(0.3, 2);
@@ -56,7 +57,7 @@ directionalLight.shadow.camera.top = d;
 directionalLight.shadow.camera.bottom = - d;
 directionalLight.shadow.mapSize.set(1024, 1024);
 
-const horWall = new BoxGeometry(45, 1,0.75);
+const horWall = new BoxGeometry(45, 0.5,0.75);
 const wMat = new MeshStandardMaterial({color: wallColor});
 
 const topWall = new Mesh(horWall, wMat);
@@ -78,7 +79,7 @@ game.addObject(ambientLight, "ambientLight");
 game.addObject(directionalLight, "directionalLight");
 game.addObject(camera, "camera");
 game.addObject(outside, "outside");
-game.addObject(court, "court");
+
 game.addObject(topWall, game.topWallTag);
 game.addObject(bottomWall, game.bottomWallTag);
 game.addOpponent(aiCapsule);
@@ -91,8 +92,6 @@ directionalLight.castShadow = true;
 sphere.castShadow = true;
 outside.receiveShadow = true;
 outside.castShadow = false;
-court.receiveShadow = true;
-court.castShadow = false;
 topWall.castShadow = true;
 bottomWall.castShadow = true;
 aiCapsule.castShadow = true;
@@ -103,7 +102,8 @@ function loop() {
     game.tick();
     requestAnimationFrame(loop);
 }
-loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
+
+const onFontLoad = (font) => {
     const geometry = new TextGeometry( '0', {
         font: font,
         size: 6,
@@ -126,5 +126,20 @@ loader.load( 'helvetiker_regular.typeface.json', function ( font ) {
     opponentScore.position.y = 12;
     game.addObject(playerScore, game.playerScoreTag);
     game.addObject(opponentScore, game.opponentScoreTag);
+}
+
+const onCourtLoad = (gltf) => {
+    const court = gltf.scene.children[0];
+    court.rotateOnAxis(new Vector3(1, 0,0), degToRad(90));
+    court.receiveShadow = true;
+    court.castShadow = false;
+    console.log(court);
+    game.addObject(gltf.scene, "court");
+}
+
+Promise.all([
+    LoadFont('helvetiker_regular.typeface.json').then(onFontLoad),
+    LoadGLTF('court.glb').then(onCourtLoad),
+]).then(() => {
     loop();
-});
+})
