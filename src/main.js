@@ -21,14 +21,23 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = PCFShadowMap;
 
 const game = new Game(renderer, camera);
+const ballColor = "#FAB139"
+const wallColor = "#719972";
+const outsideColor = "#4087BB";
+const courtColor = "#33546D";
+const courtWidth = 45;
+const courtHeight = 20;
 
 const sphereGeometry = new SphereGeometry(0.5 );
-const sMat = new MeshStandardMaterial({color: new Color("darkviolet")});
+const sMat = new MeshStandardMaterial({color: ballColor});
 const sphere = new Mesh(sphereGeometry, sMat);
 
-const planeGeometry = new PlaneGeometry(10000, 10000, 10, 10);
-const pMat = new MeshLambertMaterial({color: new Color("cornflowerblue")});
-const plane = new Mesh(planeGeometry, pMat);
+const outsideGeometry = new PlaneGeometry(10000, 10000, 10, 10);
+const courtGeometry = new PlaneGeometry(courtWidth, courtHeight, 10, 10);
+const outMat = new MeshStandardMaterial({color: outsideColor});
+const courtMat = new MeshStandardMaterial({color: courtColor});
+const outside = new Mesh(outsideGeometry, outMat);
+const court = new Mesh(courtGeometry, courtMat);
 
 const cGeometry = new CapsuleGeometry(0.3, 2);
 const cMat = new MeshStandardMaterial({color: new Color("white")});
@@ -38,6 +47,8 @@ const aiCapsule = new Mesh(cGeometry, cMat);
 const ambientLight = new AmbientLight(new Color("white"), 1.5);
 const directionalLight = new DirectionalLight(new Color("white"), 2);
 
+
+
 const d = 32;
 directionalLight.shadow.camera.left = - d;
 directionalLight.shadow.camera.right = d;
@@ -46,14 +57,15 @@ directionalLight.shadow.camera.bottom = - d;
 directionalLight.shadow.mapSize.set(1024, 1024);
 
 const horWall = new BoxGeometry(45, 1,0.75);
-const wMat = new MeshStandardMaterial({color: new Color("DarkSlateBlue")});
+const wMat = new MeshStandardMaterial({color: wallColor});
 
 const topWall = new Mesh(horWall, wMat);
 const bottomWall = new Mesh(horWall, wMat);
 
 camera.rotateOnAxis(new Vector3(1, 0,0), degToRad(15));
 
-plane.position.z = -0.5;
+outside.position.z = -0.6;
+court.position.z = -0.5;
 playerCapsule.position.x = -18;
 topWall.position.y = 10;
 bottomWall.position.y = -10;
@@ -65,7 +77,8 @@ directionalLight.position.set(0, 5, 10);
 game.addObject(ambientLight, "ambientLight");
 game.addObject(directionalLight, "directionalLight");
 game.addObject(camera, "camera");
-game.addObject(plane, "plane");
+game.addObject(outside, "outside");
+game.addObject(court, "court");
 game.addObject(topWall, game.topWallTag);
 game.addObject(bottomWall, game.bottomWallTag);
 game.addOpponent(aiCapsule);
@@ -76,8 +89,10 @@ game.addCollider(bottomWall, game.bottomWallTag);
 
 directionalLight.castShadow = true;
 sphere.castShadow = true;
-plane.receiveShadow = true;
-plane.castShadow = false;
+outside.receiveShadow = true;
+outside.castShadow = false;
+court.receiveShadow = true;
+court.castShadow = false;
 topWall.castShadow = true;
 bottomWall.castShadow = true;
 aiCapsule.castShadow = true;

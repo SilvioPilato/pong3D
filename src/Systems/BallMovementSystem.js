@@ -4,7 +4,7 @@ export class BallMovementSystem {
     playerTag = null;
     topWallTag = null;
     bottomWallTag = null;
-    BALL_SPEED = 9;
+    BALL_SPEED = 10;
     constructor(ballTag, playerTag, opponentTag, topWallTag, bottomWallTag) {
         this.opponentTag = opponentTag;
         this.ballTag = ballTag;
