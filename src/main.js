@@ -7,7 +7,7 @@ import {
     MeshStandardMaterial,
     PerspectiveCamera, PlaneGeometry,
     SphereGeometry, Vector3,
-    WebGLRenderer, MeshLambertMaterial, PCFShadowMap
+    WebGLRenderer, PCFShadowMap
 } from 'three';
 import {degToRad} from "three/src/math/MathUtils.js";
 import {Game} from "./Game.js";
@@ -15,6 +15,8 @@ import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
 import {LoadFont, LoadGLTF} from "./Loaders.js";
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 const renderer = new WebGLRenderer({antialias: true});
+const pixelRatio = Math.min(window.devicePixelRatio, 2)
+renderer.setPixelRatio(pixelRatio)
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = PCFShadowMap;
@@ -47,8 +49,6 @@ const aiCapsule = new Mesh(cGeometry, cMat);
 
 const ambientLight = new AmbientLight(new Color("white"), 1.5);
 const directionalLight = new DirectionalLight(new Color("white"), 2);
-
-
 
 const d = 32;
 directionalLight.shadow.camera.left = - d;
@@ -130,6 +130,7 @@ const onFontLoad = (font) => {
 
 const onCourtLoad = (gltf) => {
     const court = gltf.scene.children[0];
+    console.log(court.material)
     court.rotateOnAxis(new Vector3(1, 0,0), degToRad(90));
     court.receiveShadow = true;
     court.castShadow = false;
