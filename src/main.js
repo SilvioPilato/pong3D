@@ -65,8 +65,7 @@ const bottomWall = new Mesh(horWall, wMat);
 
 camera.rotateOnAxis(new Vector3(1, 0,0), degToRad(15));
 
-outside.position.z = -0.6;
-court.position.z = -0.5;
+outside.position.z = -0.7;
 playerCapsule.position.x = -18;
 topWall.position.y = 10;
 bottomWall.position.y = -10;
@@ -130,6 +129,7 @@ const onFontLoad = (font) => {
 
 const onCourtLoad = (gltf) => {
     const court = gltf.scene.children[0];
+    court.position.z = -0.5;
     court.rotateOnAxis(new Vector3(1, 0,0), degToRad(90));
     court.receiveShadow = true;
     court.castShadow = false;
