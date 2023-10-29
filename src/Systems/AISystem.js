@@ -3,7 +3,7 @@ export class AISystem {
     ballTag = null;
     topWallTag = null;
     bottomWallTag = null;
-    OPPONENT_SPEED = 5;
+    OPPONENT_SPEED = 6;
     constructor(agentTag, ballTag, topWallTag, bottomWallTag) {
         this.agentTag = agentTag;
         this.ballTag = ballTag;
