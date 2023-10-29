@@ -25,7 +25,7 @@ const ballColor = "#FAB139"
 const wallColor = "#719972";
 const outsideColor = "#4087BB";
 const courtColor = "#33546D";
-const courtWidth = 45;
+const courtWidth = 46;
 const courtHeight = 20;
 
 const sphereGeometry = new SphereGeometry(0.5 );
@@ -57,7 +57,7 @@ directionalLight.shadow.camera.top = d;
 directionalLight.shadow.camera.bottom = - d;
 directionalLight.shadow.mapSize.set(1024, 1024);
 
-const horWall = new BoxGeometry(45, 0.5,0.75);
+const horWall = new BoxGeometry(courtWidth, 0.5,0.75);
 const wMat = new MeshStandardMaterial({color: wallColor});
 
 const topWall = new Mesh(horWall, wMat);
@@ -133,7 +133,6 @@ const onCourtLoad = (gltf) => {
     court.rotateOnAxis(new Vector3(1, 0,0), degToRad(90));
     court.receiveShadow = true;
     court.castShadow = false;
-    console.log(court);
     game.addObject(gltf.scene, "court");
 }
 
