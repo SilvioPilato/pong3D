@@ -35,7 +35,7 @@ export class Game {
         this.camera = camera;
         this.clock = new Clock();
         new KeyboardHandler();
-        this.AISystem = new AISystem(this.opponentTag, this.ballTag, this.playerTag, this.topWallTag, this.bottomWallTag);
+        this.AISystem = new AISystem(this.opponentTag, this.ballTag, this.topWallTag, this.bottomWallTag);
         this.BallMoveSystem = new BallMovementSystem(this.ballTag, this.playerTag, this.opponentTag, this.topWallTag, this.bottomWallTag);
         this.ScoreSystem = new ScoreSystem(this.ballTag, this.playerTag, this.opponentTag, this.playerScoreTag, this.opponentScoreTag);
         this.PlayerMoveSystem = new PlayerMovementSystem(this.playerTag, this.topWallTag, this.bottomWallTag);

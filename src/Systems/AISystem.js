@@ -1,19 +1,16 @@
 export class AISystem {
     agentTag = null;
     ballTag = null;
-    playerTag = null;
     topWallTag = null;
     bottomWallTag = null;
     OPPONENT_SPEED = 5;
-    constructor(agentTag, ballTag, playerTag, topWallTag, bottomWallTag) {
+    constructor(agentTag, ballTag, topWallTag, bottomWallTag) {
         this.agentTag = agentTag;
         this.ballTag = ballTag;
-        this.playerTag = playerTag;
         this.topWallTag = topWallTag;
         this.bottomWallTag = bottomWallTag;
     }
     execute(entities, colliders, deltaTime) {
-        // const playerEntity = entities.get(this.playerTag);
         const agentEntity = entities.get(this.agentTag);
         const ballEntity = entities.get(this.ballTag);
 
