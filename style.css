@@ -5,4 +5,5 @@
 
 body {
   all: unset;
+  overflow: hidden;
 }
