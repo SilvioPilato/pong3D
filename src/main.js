@@ -14,7 +14,7 @@ import {Game} from "./Game.js";
 import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
 import {LoadFont, LoadGLTF} from "./Loaders.js";
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
-const renderer = new WebGLRenderer();
+const renderer = new WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = PCFShadowMap;
