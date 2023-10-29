@@ -136,6 +136,17 @@ const onCourtLoad = (gltf) => {
     game.addObject(gltf.scene, "court");
 }
 
+window.addEventListener('resize', handleResize)
+
+function handleResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+
+    const pixelRatio = Math.min(window.devicePixelRatio, 2)
+    renderer.setPixelRatio(pixelRatio)
+}
+
 Promise.all([
     LoadFont('helvetiker_regular.typeface.json').then(onFontLoad),
     LoadGLTF('court.glb').then(onCourtLoad),
