@@ -13,6 +13,9 @@ import {degToRad} from "three/src/math/MathUtils.js";
 import {Game} from "./Game.js";
 import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
 import {LoadFont, LoadGLTF} from "./Loaders.js";
+import {func} from "three/addons/nodes/code/FunctionNode.js";
+import {GUI} from "dat.gui";
+import {AudioHandler} from "./AudioHandler.js";
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 const renderer = new WebGLRenderer({antialias: true});
 const pixelRatio = Math.min(window.devicePixelRatio, 2)
@@ -147,9 +150,36 @@ function handleResize() {
     renderer.setPixelRatio(pixelRatio)
 }
 
+
+function setupAudio() {
+    const audio = {
+        "muted": true,
+        "volume": 0.7,
+    }
+    new AudioHandler();
+    const ballDrop = new Audio("wall_hit.wav");
+    const paddleHit = new Audio("paddle_1.wav");
+    const goal = new Audio("goal_1.wav");
+    AudioHandler.addTrack(ballDrop, "ball_drop");
+    AudioHandler.addTrack(paddleHit, "paddle_hit");
+    AudioHandler.addTrack(goal, "goal_scored");
+    AudioHandler.setMuted(true);
+    let gui = new GUI();
+    let audioFolder = gui.addFolder('Audio');
+    audioFolder.add(audio, "muted").onChange(value => {
+        AudioHandler.setMuted(value);
+    });
+    audioFolder.add(audio, "volume", 0, 1, 0.05).onChange(value => {
+        AudioHandler.setVolume(value);
+    });
+}
+
+
+
 Promise.all([
     LoadFont('helvetiker_regular.typeface.json').then(onFontLoad),
     LoadGLTF('court.glb').then(onCourtLoad),
 ]).then(() => {
+    setupAudio();
     loop();
 })

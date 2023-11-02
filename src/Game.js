@@ -5,6 +5,7 @@ import {BallMovementSystem} from "./Systems/BallMovementSystem.js";
 import {ScoreSystem} from "./Systems/ScoreSystem.js";
 import {PlayerMovementSystem} from "./Systems/PlayerMovementSystem.js";
 import {ColliderUpdateSystem} from "./Systems/ColliderUpdateSystem.js";
+import {AudioSystem} from "./Systems/AudioSystem.js";
 export class Game {
     renderer = null;
     scene = null;
@@ -28,7 +29,7 @@ export class Game {
     ScoreSystem = null;
     PlayerMoveSystem = null;
     ColliderUpdateSystem = null;
-
+    AudioSystem = null;
     constructor(renderer, camera) {
         this.scene = new Scene();
         this.renderer = renderer;
@@ -40,6 +41,7 @@ export class Game {
         this.ScoreSystem = new ScoreSystem(this.ballTag, this.playerTag, this.opponentTag, this.playerScoreTag, this.opponentScoreTag);
         this.PlayerMoveSystem = new PlayerMovementSystem(this.playerTag, this.topWallTag, this.bottomWallTag);
         this.ColliderUpdateSystem = new ColliderUpdateSystem(this.colliders, this.threeObjs);
+        this.AudioSystem = new AudioSystem(this.ballTag, this.playerTag, this.opponentTag, this.topWallTag, this.bottomWallTag);
     }
 
     addPlayer(object) {
@@ -71,6 +73,7 @@ export class Game {
         this.PlayerMoveSystem.execute(this.threeObjs, this.colliders, deltaTime);
         this.BallMoveSystem.execute(this.ballVelocity, this.threeObjs, this.colliders, deltaTime);
         this.AISystem.execute(this.threeObjs, this.colliders, deltaTime);
+        this.AudioSystem.execute(this.threeObjs,this.colliders);
         this.ScoreSystem.execute(this.threeObjs, this.ballVelocity);
 
         this.renderer.render( this.scene, this.camera );
