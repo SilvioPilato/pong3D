@@ -18,9 +18,18 @@ import {AudioHandler} from "./AudioHandler.js";
 import {
     AUDIO_GOAL_SCORED,
     AUDIO_PADDLE_HIT,
-    AUDIO_WALL_HIT, TAG_AMBIENT_LIGHT, TAG_BALL, TAG_BOTTOM_WALL, TAG_CAMERA, TAG_COURT, TAG_DIRECTIONAL_LIGHT,
-    TAG_GOAL_SCORED, TAG_OUTSIDE,
-    TAG_PADDLE_HIT, TAG_TOP_WALL,
+    AUDIO_WALL_HIT, COLOR_AMBIENT_LIGHT,
+    COLOR_BALL, COLOR_CAPSULE, COLOR_COURT, COLOR_DIRECTIONAL_LIGHT, COLOR_FONT, COLOR_OUTSIDE, COLOR_WALL,
+    TAG_AMBIENT_LIGHT,
+    TAG_BALL,
+    TAG_BOTTOM_WALL,
+    TAG_CAMERA,
+    TAG_COURT,
+    TAG_DIRECTIONAL_LIGHT,
+    TAG_GOAL_SCORED,
+    TAG_OUTSIDE,
+    TAG_PADDLE_HIT,
+    TAG_TOP_WALL,
     TAG_WALL_HIT
 } from "./config/index.js";
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
@@ -33,32 +42,28 @@ renderer.shadowMap.type = PCFShadowMap;
 
 const game = new Game(renderer, camera);
 
-const ballColor = "#FAB139"
-const wallColor = "#719972";
-const outsideColor = "#4087BB";
-const courtColor = "#33546D";
 const courtWidth = 46;
 const courtHeight = 20;
 
 const sphereGeometry = new SphereGeometry(0.5 );
-const sMat = new MeshStandardMaterial({color: ballColor});
+const sMat = new MeshStandardMaterial({color: COLOR_BALL});
 const sphere = new Mesh(sphereGeometry, sMat);
 
 const outsideGeometry = new PlaneGeometry(10000, 10000, 10, 10);
 const courtGeometry = new PlaneGeometry(courtWidth, courtHeight, 10, 10);
 
-const outMat = new MeshStandardMaterial({color: outsideColor});
+const outMat = new MeshStandardMaterial({color: COLOR_OUTSIDE});
 const outside = new Mesh(outsideGeometry, outMat);
-const courtMat = new MeshStandardMaterial({color: courtColor});
+const courtMat = new MeshStandardMaterial({color: COLOR_COURT});
 const court = new Mesh(courtGeometry, courtMat);
 
 const cGeometry = new CapsuleGeometry(0.3, 2);
-const cMat = new MeshStandardMaterial({color: new Color("white")});
+const cMat = new MeshStandardMaterial({color: new Color(COLOR_CAPSULE)});
 const playerCapsule = new Mesh(cGeometry, cMat);
 const aiCapsule = new Mesh(cGeometry, cMat);
 
-const ambientLight = new AmbientLight(new Color("white"), 1.5);
-const directionalLight = new DirectionalLight(new Color("white"), 2);
+const ambientLight = new AmbientLight(new Color(COLOR_AMBIENT_LIGHT), 1.5);
+const directionalLight = new DirectionalLight(new Color(COLOR_DIRECTIONAL_LIGHT), 2);
 
 const d = 32;
 directionalLight.shadow.camera.left = - d;
@@ -68,7 +73,7 @@ directionalLight.shadow.camera.bottom = - d;
 directionalLight.shadow.mapSize.set(1024, 1024);
 
 const horWall = new BoxGeometry(courtWidth, 0.5,0.75);
-const wMat = new MeshStandardMaterial({color: wallColor});
+const wMat = new MeshStandardMaterial({color: COLOR_WALL});
 
 const topWall = new Mesh(horWall, wMat);
 const bottomWall = new Mesh(horWall, wMat);
@@ -124,7 +129,7 @@ const onFontLoad = (font) => {
         bevelOffset: 0,
         bevelSegments: 2
     });
-    const mat = new MeshStandardMaterial({color: new Color("DeepPink")});
+    const mat = new MeshStandardMaterial({color: new Color(COLOR_FONT)});
     const playerScore = new Mesh(geometry, mat);
     const opponentScore = new Mesh(geometry, mat);
     playerScore.castShadow = true;

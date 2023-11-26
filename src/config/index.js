@@ -17,3 +17,12 @@ export const TAG_BALL ="ball";
 export const TAG_OPPONENT_SCORE ="opponentScore";
 export const TAG_PLAYER_SCORE ="playerScore";
 export const TAG_COURT = "court";
+export const COLOR_BALL = "#FAB139";
+export const COLOR_WALL = "#719972";
+export const COLOR_OUTSIDE = "#4087BB";
+export const COLOR_COURT = "#33546D";
+
+export const COLOR_CAPSULE = "white";
+export const COLOR_AMBIENT_LIGHT = "white";
+export const COLOR_DIRECTIONAL_LIGHT = "white";
+export const COLOR_FONT = "DeepPink";
