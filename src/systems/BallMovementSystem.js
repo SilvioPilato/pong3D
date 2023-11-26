@@ -1,17 +1,13 @@
+import {TAG_BALL, TAG_BOTTOM_WALL, TAG_OPPONENT, TAG_PLAYER, TAG_TOP_WALL} from "../config/index.js";
+
 export class BallMovementSystem {
-    opponentTag = null;
-    ballTag = null;
-    playerTag = null;
-    topWallTag = null;
-    bottomWallTag = null;
+    opponentTag = TAG_OPPONENT;
+    ballTag = TAG_BALL;
+    playerTag = TAG_PLAYER;
+    topWallTag = TAG_TOP_WALL;
+    bottomWallTag = TAG_BOTTOM_WALL;
     BALL_SPEED = 10;
-    constructor(ballTag, playerTag, opponentTag, topWallTag, bottomWallTag) {
-        this.opponentTag = opponentTag;
-        this.ballTag = ballTag;
-        this.playerTag = playerTag;
-        this.topWallTag = topWallTag;
-        this.bottomWallTag = bottomWallTag;
-    }
+
     execute(ballVelocity, threeObjs, colliders, deltaTime) {
         const ballThree = threeObjs.get(this.ballTag);
         const playerThree = threeObjs.get(this.playerTag);

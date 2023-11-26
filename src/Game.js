@@ -1,24 +1,29 @@
 import {Box3, Clock, Scene, Vector3} from "three";
 import {KeyboardHandler} from "./KeyboardHandler.js";
-import {AISystem} from "./Systems/AISystem.js";
-import {BallMovementSystem} from "./Systems/BallMovementSystem.js";
-import {ScoreSystem} from "./Systems/ScoreSystem.js";
-import {PlayerMovementSystem} from "./Systems/PlayerMovementSystem.js";
-import {ColliderUpdateSystem} from "./Systems/ColliderUpdateSystem.js";
-import {AudioSystem} from "./Systems/AudioSystem.js";
+import {AISystem} from "./systems/AISystem.js";
+import {BallMovementSystem} from "./systems/BallMovementSystem.js";
+import {ScoreSystem} from "./systems/ScoreSystem.js";
+import {PlayerMovementSystem} from "./systems/PlayerMovementSystem.js";
+import {ColliderUpdateSystem} from "./systems/ColliderUpdateSystem.js";
+import {AudioSystem} from "./systems/AudioSystem.js";
+import {
+    TAG_BALL,
+    TAG_BOTTOM_WALL,
+    TAG_OPPONENT,
+    TAG_OPPONENT_SCORE,
+    TAG_PLAYER,
+    TAG_PLAYER_SCORE,
+    TAG_TOP_WALL
+} from "./config/index.js";
 export class Game {
     renderer = null;
     scene = null;
     camera = null;
     clock = null;
     // we use tag as component ids
-    playerTag = "player";
-    opponentTag = "opponent";
-    bottomWallTag = "bottomWall";
-    topWallTag = "topWall";
-    ballTag = "ball";
-    opponentScoreTag = "opponentScore";
-    playerScoreTag = "playerScore";
+    playerTag = TAG_PLAYER;
+    opponentTag = TAG_OPPONENT;
+    ballTag = TAG_BALL;
     // components
     threeObjs = new Map();
     colliders = new Map();
@@ -36,12 +41,12 @@ export class Game {
         this.camera = camera;
         this.clock = new Clock();
         new KeyboardHandler();
-        this.AISystem = new AISystem(this.opponentTag, this.ballTag, this.topWallTag, this.bottomWallTag);
-        this.BallMoveSystem = new BallMovementSystem(this.ballTag, this.playerTag, this.opponentTag, this.topWallTag, this.bottomWallTag);
-        this.ScoreSystem = new ScoreSystem(this.ballTag, this.playerTag, this.opponentTag, this.playerScoreTag, this.opponentScoreTag);
-        this.PlayerMoveSystem = new PlayerMovementSystem(this.playerTag, this.topWallTag, this.bottomWallTag);
+        this.AISystem = new AISystem();
+        this.BallMoveSystem = new BallMovementSystem();
+        this.ScoreSystem = new ScoreSystem();
+        this.PlayerMoveSystem = new PlayerMovementSystem();
         this.ColliderUpdateSystem = new ColliderUpdateSystem(this.colliders, this.threeObjs);
-        this.AudioSystem = new AudioSystem(this.ballTag, this.playerTag, this.opponentTag, this.topWallTag, this.bottomWallTag);
+        this.AudioSystem = new AudioSystem();
     }
 
     addPlayer(object) {

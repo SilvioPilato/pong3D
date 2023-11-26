@@ -1,20 +1,17 @@
 import {Vector3} from "three";
 import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
+import {TAG_BALL, TAG_OPPONENT, TAG_OPPONENT_SCORE, TAG_PLAYER, TAG_PLAYER_SCORE} from "../config/index.js";
 
 export class ScoreSystem {
     THRESHOLD = 5;
     playerScore = 0;
     opponentScore = 0;
-    playerScoreTag = null;
-    opponentScoreTag = null;
+    playerScoreTag = TAG_PLAYER_SCORE;
+    opponentScoreTag = TAG_OPPONENT_SCORE;
+    playerTag = TAG_PLAYER;
+    ballTag = TAG_BALL;
+    opponentTag = TAG_OPPONENT;
     resetVelocity = new Vector3(-1,-1,0);
-    constructor(ballTag, playerTag, opponentTag, playerScoreTag, opponentScoreTag) {
-        this.opponentTag = opponentTag;
-        this.ballTag = ballTag;
-        this.playerTag = playerTag;
-        this.playerScoreTag = playerScoreTag;
-        this.opponentScoreTag = opponentScoreTag;
-    }
     execute(threeObjs, ballVelocity) {
         const ballThree = threeObjs.get(this.ballTag);
         const playerThree = threeObjs.get(this.playerTag);

@@ -1,15 +1,11 @@
 import {KeyboardHandler} from "../KeyboardHandler.js";
+import {TAG_BOTTOM_WALL, TAG_PLAYER, TAG_TOP_WALL} from "../config/index.js";
 
 export class PlayerMovementSystem {
-    playerTag = null;
-    topWallTag = null;
-    bottomWallTag = null;
+    playerTag = TAG_PLAYER;
+    topWallTag = TAG_TOP_WALL;
+    bottomWallTag = TAG_BOTTOM_WALL;
     PLAYER_SPEED = 14;
-    constructor(playerTag, topWallTag, bottomWallTag) {
-        this.playerTag = playerTag;
-        this.topWallTag = topWallTag;
-        this.bottomWallTag = bottomWallTag;
-    }
     execute(threeObjs, colliders, deltaTime) {
         const playerThree = threeObjs.get(this.playerTag);
         const playerCollider = colliders.get(this.playerTag);

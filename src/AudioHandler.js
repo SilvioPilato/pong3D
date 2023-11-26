@@ -19,7 +19,8 @@ export class AudioHandler {
 
 
     static play(id) {
-        if (!this.tracks.has(id)) return;
-        this.tracks.get(id).play();
+        let track = this.tracks.get(id);
+        if (!track || track.muted) return;
+        track.play();
     }
 }
