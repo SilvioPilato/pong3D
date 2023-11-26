@@ -18,7 +18,7 @@ import {AudioHandler} from "./AudioHandler.js";
 import {
     AUDIO_GOAL_SCORED,
     AUDIO_PADDLE_HIT,
-    AUDIO_WALL_HIT, TAG_AMBIENT_LIGHT, TAG_BALL, TAG_BOTTOM_WALL, TAG_CAMERA, TAG_DIRECTIONAL_LIGHT,
+    AUDIO_WALL_HIT, TAG_AMBIENT_LIGHT, TAG_BALL, TAG_BOTTOM_WALL, TAG_CAMERA, TAG_COURT, TAG_DIRECTIONAL_LIGHT,
     TAG_GOAL_SCORED, TAG_OUTSIDE,
     TAG_PADDLE_HIT, TAG_TOP_WALL,
     TAG_WALL_HIT
@@ -143,7 +143,7 @@ const onCourtLoad = (gltf) => {
     court.rotateOnAxis(new Vector3(1, 0,0), degToRad(90));
     court.receiveShadow = true;
     court.castShadow = false;
-    game.addObject(gltf.scene, "court");
+    game.addObject(gltf.scene, TAG_COURT);
 }
 
 window.addEventListener('resize', handleResize)

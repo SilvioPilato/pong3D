@@ -16,3 +16,4 @@ export const TAG_TOP_WALL ="topWall";
 export const TAG_BALL ="ball";
 export const TAG_OPPONENT_SCORE ="opponentScore";
 export const TAG_PLAYER_SCORE ="playerScore";
+export const TAG_COURT = "court";
