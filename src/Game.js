@@ -23,11 +23,7 @@ export class Game {
     // we use tag as component ids
     playerTag = TAG_PLAYER;
     opponentTag = TAG_OPPONENT;
-    bottomWallTag = TAG_BOTTOM_WALL;
-    topWallTag = TAG_TOP_WALL;
     ballTag = TAG_BALL;
-    opponentScoreTag = TAG_OPPONENT_SCORE;
-    playerScoreTag = TAG_PLAYER_SCORE;
     // components
     threeObjs = new Map();
     colliders = new Map();
@@ -45,12 +41,12 @@ export class Game {
         this.camera = camera;
         this.clock = new Clock();
         new KeyboardHandler();
-        this.AISystem = new AISystem(this.opponentTag, this.ballTag, this.topWallTag, this.bottomWallTag);
-        this.BallMoveSystem = new BallMovementSystem(this.ballTag, this.playerTag, this.opponentTag, this.topWallTag, this.bottomWallTag);
-        this.ScoreSystem = new ScoreSystem(this.ballTag, this.playerTag, this.opponentTag, this.playerScoreTag, this.opponentScoreTag);
-        this.PlayerMoveSystem = new PlayerMovementSystem(this.playerTag, this.topWallTag, this.bottomWallTag);
+        this.AISystem = new AISystem();
+        this.BallMoveSystem = new BallMovementSystem();
+        this.ScoreSystem = new ScoreSystem();
+        this.PlayerMoveSystem = new PlayerMovementSystem();
         this.ColliderUpdateSystem = new ColliderUpdateSystem(this.colliders, this.threeObjs);
-        this.AudioSystem = new AudioSystem(this.ballTag, this.playerTag, this.opponentTag, this.topWallTag, this.bottomWallTag);
+        this.AudioSystem = new AudioSystem();
     }
 
     addPlayer(object) {
