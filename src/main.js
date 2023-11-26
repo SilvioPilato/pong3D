@@ -13,9 +13,16 @@ import {degToRad} from "three/src/math/MathUtils.js";
 import {Game} from "./Game.js";
 import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
 import {LoadFont, LoadGLTF} from "./Loaders.js";
-import {func} from "three/addons/nodes/code/FunctionNode.js";
 import {GUI} from "dat.gui";
 import {AudioHandler} from "./AudioHandler.js";
+import {
+    AUDIO_GOAL_SCORED,
+    AUDIO_PADDLE_HIT,
+    AUDIO_WALL_HIT, TAG_AMBIENT_LIGHT, TAG_BALL, TAG_BOTTOM_WALL, TAG_CAMERA, TAG_DIRECTIONAL_LIGHT,
+    TAG_GOAL_SCORED, TAG_OUTSIDE,
+    TAG_PADDLE_HIT, TAG_TOP_WALL,
+    TAG_WALL_HIT
+} from "./config/index.js";
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100)
 const renderer = new WebGLRenderer({antialias: true});
 const pixelRatio = Math.min(window.devicePixelRatio, 2)
@@ -77,18 +84,18 @@ camera.position.set(0, -5, 25)
 aiCapsule.position.set(18, 0, 0);
 directionalLight.position.set(0, 5, 10);
 
-game.addObject(ambientLight, "ambientLight");
-game.addObject(directionalLight, "directionalLight");
-game.addObject(camera, "camera");
-game.addObject(outside, "outside");
+game.addObject(ambientLight, TAG_AMBIENT_LIGHT);
+game.addObject(directionalLight, TAG_DIRECTIONAL_LIGHT);
+game.addObject(camera, TAG_CAMERA);
+game.addObject(outside, TAG_OUTSIDE);
 
-game.addObject(topWall, game.topWallTag);
-game.addObject(bottomWall, game.bottomWallTag);
+game.addObject(topWall, TAG_TOP_WALL);
+game.addObject(bottomWall, TAG_BOTTOM_WALL);
 game.addOpponent(aiCapsule);
 game.addPlayer(playerCapsule);
-game.addBall(sphere, game.ballTag);
-game.addCollider(topWall, game.topWallTag);
-game.addCollider(bottomWall, game.bottomWallTag);
+game.addBall(sphere, TAG_BALL);
+game.addCollider(topWall, TAG_TOP_WALL);
+game.addCollider(bottomWall, TAG_BOTTOM_WALL);
 
 directionalLight.castShadow = true;
 sphere.castShadow = true;
@@ -157,12 +164,12 @@ function setupAudio() {
         "volume": 0.7,
     }
     new AudioHandler();
-    const ballDrop = new Audio("wall_hit.wav");
-    const paddleHit = new Audio("paddle_1.wav");
-    const goal = new Audio("goal_1.wav");
-    AudioHandler.addTrack(ballDrop, "ball_drop");
-    AudioHandler.addTrack(paddleHit, "paddle_hit");
-    AudioHandler.addTrack(goal, "goal_scored");
+    const ballDrop = new Audio(AUDIO_WALL_HIT);
+    const paddleHit = new Audio(AUDIO_PADDLE_HIT);
+    const goal = new Audio(AUDIO_GOAL_SCORED);
+    AudioHandler.addTrack(ballDrop, TAG_WALL_HIT);
+    AudioHandler.addTrack(paddleHit, TAG_PADDLE_HIT);
+    AudioHandler.addTrack(goal, TAG_GOAL_SCORED);
     AudioHandler.setMuted(true);
     let gui = new GUI();
     let audioFolder = gui.addFolder('Audio');

@@ -1,24 +1,33 @@
 import {Box3, Clock, Scene, Vector3} from "three";
 import {KeyboardHandler} from "./KeyboardHandler.js";
-import {AISystem} from "./Systems/AISystem.js";
-import {BallMovementSystem} from "./Systems/BallMovementSystem.js";
-import {ScoreSystem} from "./Systems/ScoreSystem.js";
-import {PlayerMovementSystem} from "./Systems/PlayerMovementSystem.js";
-import {ColliderUpdateSystem} from "./Systems/ColliderUpdateSystem.js";
-import {AudioSystem} from "./Systems/AudioSystem.js";
+import {AISystem} from "./systems/AISystem.js";
+import {BallMovementSystem} from "./systems/BallMovementSystem.js";
+import {ScoreSystem} from "./systems/ScoreSystem.js";
+import {PlayerMovementSystem} from "./systems/PlayerMovementSystem.js";
+import {ColliderUpdateSystem} from "./systems/ColliderUpdateSystem.js";
+import {AudioSystem} from "./systems/AudioSystem.js";
+import {
+    TAG_BALL,
+    TAG_BOTTOM_WALL,
+    TAG_OPPONENT,
+    TAG_OPPONENT_SCORE,
+    TAG_PLAYER,
+    TAG_PLAYER_SCORE,
+    TAG_TOP_WALL
+} from "./config/index.js";
 export class Game {
     renderer = null;
     scene = null;
     camera = null;
     clock = null;
     // we use tag as component ids
-    playerTag = "player";
-    opponentTag = "opponent";
-    bottomWallTag = "bottomWall";
-    topWallTag = "topWall";
-    ballTag = "ball";
-    opponentScoreTag = "opponentScore";
-    playerScoreTag = "playerScore";
+    playerTag = TAG_PLAYER;
+    opponentTag = TAG_OPPONENT;
+    bottomWallTag = TAG_BOTTOM_WALL;
+    topWallTag = TAG_TOP_WALL;
+    ballTag = TAG_BALL;
+    opponentScoreTag = TAG_OPPONENT_SCORE;
+    playerScoreTag = TAG_PLAYER_SCORE;
     // components
     threeObjs = new Map();
     colliders = new Map();
