@@ -30,7 +30,7 @@ func setupRoutes(r *mux.Router) {
 
 func createRoom(w http.ResponseWriter, _ *http.Request) {
 	id := uuid.New().String()
-	res := RoomCreate{RoomId: id}
+	_ := RoomCreate{RoomId: id}
 	_, err := fmt.Fprintf(w, id)
 	if err != nil {
 		return
@@ -55,7 +55,7 @@ func handleJoinRequest(join *RoomJoin, conn *websocket.Conn) {
 	if rooms[join.Room] == nil {
 		rooms[join.Room] = make([]*websocket.Conn, 0)
 	}
-	_ = append(rooms[join.Room], conn)
+	rooms[join.Room] = append(rooms[join.Room], conn)
 }
 
 func handleWS(message *WSMessage, conn *websocket.Conn) error {
