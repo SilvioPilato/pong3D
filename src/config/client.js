@@ -1,0 +1,48 @@
+import { Vector3 } from "three";
+import { PLAYER_ONE_START_POS, PLAYER_TWO_START_POS } from ".";
+
+
+export const POSITION_OUTSIDE = new Vector3(0, 0, -0.7);
+export const POSITION_PLAYER_VEC = new Vector3(PLAYER_ONE_START_POS.x, 0, 0);
+export const POSITION_TOP_WALL = new Vector3(0, 10, 0);
+export const POSITION_BOTTOM_WALL = new Vector3(0, -10, 0);
+export const POSITION_CAMERA = new Vector3(0, -5, 25);
+export const POSITION_AI_VEC = new Vector3(PLAYER_TWO_START_POS.x, 0, 0);
+export const POSITION_DIRECTIONAL_LIGHT = new Vector3(0, 5, 10);
+export const POSITION_PLAYER_SCORE = new Vector3(-18, 12, 0);
+export const POSITION_OPPONENT_SCORE = new Vector3(12, 12, 0);
+export const POSITION_COURT = new Vector3(0, 0, -0.5);
+export const FILE_AUDIO_WALL_HIT = "wall_hit.wav";
+export const FILE_AUDIO_PADDLE_HIT = "paddle_1.wav";
+export const FILE_AUDIO_GOAL_SCORED = "goal_1.wav";
+export const COLOR_BALL = "#FAB139";
+export const COLOR_WALL = "#719972";
+export const COLOR_OUTSIDE = "#4087BB";
+export const COLOR_COURT = "#33546D";
+export const COLOR_CAPSULE = "white";
+export const COLOR_AMBIENT_LIGHT = "white";
+export const COLOR_DIRECTIONAL_LIGHT = "white";
+export const COLOR_FONT = "DeepPink";
+export const FILE_FONT = "helvetiker_regular.typeface.json";
+export const FILE_COURT_MODEL = "court.glb";
+export const MENU_AUDIO_FOLDER = "Audio";
+export const MENU_AUDIO_MUTED = "muted";
+export const MENU_AUDIO_VOLUME = "volume";
+export const CAMERA_FOV = 75;
+export const CAMERA_NEAR = 0.1;
+export const CAMERA_FAR = 100;
+export const ROTATION_X_ANGLE_CAMERA = 15;
+export const ROTATION_X_ANGLE_COURT = 90;
+export const TEXT_FONT_SIZE = 6;
+export const TEXT_HEIGHT = 0.5;
+export const TEXT_CURVE_SEGMENTS = 2;
+export const TEXT_BEVEL_ENABLED = true;
+export const TEXT_BEVEL_THICKNESS = 0.5;
+export const TEXT_BEVEL_SIZE = 0.1;
+export const TEXT_BEVEL_OFFSET = 0;
+export const TEXT_BEVEL_SEGMENTS = 2;
+export const AMBIENT_LIGHT_INTENSITY = 1.5;
+export const DIRECTIONAL_LIGHT_INTENSITY = 2;
+export const DIRECTIONAL_LIGHT_MAPSIZE = 1024;
+export const DIRECTIONAL_LIGHT_SQUARE_SIDE = 32;
+

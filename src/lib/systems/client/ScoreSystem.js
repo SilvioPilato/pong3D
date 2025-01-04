@@ -1,6 +1,6 @@
 import {Vector3} from "three";
 import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
-import {TAG_BALL, TAG_OPPONENT, TAG_OPPONENT_SCORE, TAG_PLAYER, TAG_PLAYER_SCORE} from "../config/index.js";
+import {TAG_BALL, TAG_OPPONENT, TAG_OPPONENT_SCORE, TAG_PLAYER, TAG_PLAYER_SCORE} from "../../../config/index.js";
 
 export class ScoreSystem {
     THRESHOLD = 5;

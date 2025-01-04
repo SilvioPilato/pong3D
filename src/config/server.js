@@ -1,0 +1,2 @@
+
+export const SERVER_TICK_INTERVAL_IN_MS = 100;
