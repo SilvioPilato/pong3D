@@ -6,7 +6,6 @@ import { KeyboardHandler } from "../handlers/KeyboardHandler";
 import { AISystem } from "../systems/client/AISystem";
 import { AudioSystem } from "../systems/client/AudioSystem";
 import { BallMovementSystem } from "../systems/client/BallMovementSystem";
-import { ColliderUpdateSystem } from "../systems/client/ColliderUpdateSystem";
 import { OfflinePlayerMovementSystem } from "../systems/client/OfflinePlayerMovementSystem";
 import { ScoreSystem } from "../systems/client/ScoreSystem";
 
