@@ -2,7 +2,7 @@ import { Server } from "socket.io";
 import http from "http"
 import express from "express";
 import { v4 } from "uuid";
-import { ENQUEUE_ACTION, JOIN_ROOM, JOIN_SUCCESS, PLAYER_ONE_START_POS, PLAYER_TWO_START_POS, ROLE_PLAYER_1, ROLE_PLAYER_2, ROLE_SPECTATOR, PUBLISH_GAME_STATE } from "./config/index.js";
+import { ENQUEUE_ACTION, JOIN_ROOM, JOIN_SUCCESS, PLAYER_ONE_START_POS, PLAYER_TWO_START_POS, ROLE_PLAYER_1, ROLE_PLAYER_2, ROLE_SPECTATOR, PUBLISH_GAME_STATE, REQUEST_ROOMS, ROOMS_LIST, START_GAME } from "./config/index.js";
 import { ServerRoom } from "./lib/modules/ServerRoom.js";
 import { ServerEngine } from "./lib/modules/ServerEngine.js";
 import { SERVER_TICK_INTERVAL_IN_MS } from "./config/server.js";
@@ -10,7 +10,8 @@ import { SERVER_TICK_INTERVAL_IN_MS } from "./config/server.js";
 const SERVER_PORT = 8080;
 const app = new express();
 const httpServer = http.createServer(app);
-const rooms = new Map(); 
+const rooms = new Map();
+const ROOMS_PAGE_SIZE = 20;
 const io = new Server(httpServer, {
     cors: {
         origin: `http://localhost:5173`,
@@ -35,7 +36,10 @@ io.on("connection", (socket) => {
         addPlayerToEngine(socket.id, userRole);
         socket.join(roomId);
         console.log(`User ${socket.id} joined room ${roomId} with role ${userRole}`);
-        socket.emit(JOIN_SUCCESS, {role: userRole, roomId });
+        socket.emit(JOIN_SUCCESS, {role: userRole, roomId, users: room.users });
+        if (room.playerOne && room.playerTwo) {
+            io.to(roomId).emit(START_GAME, {roomId, users: room.users, role: userRole});
+        }
     });
 
     socket.on(ENQUEUE_ACTION, (arg) => {
@@ -47,6 +51,26 @@ io.on("connection", (socket) => {
             timestamp: performance.now(),
         }
         engine.inputQueue.push(actionData);
+    })
+
+    socket.on(REQUEST_ROOMS, (arg) => {
+        const arrayRooms = Array.from(rooms.keys());
+        const roomIds = [];
+        const maxPage = Math.ceil(arrayRooms.length / ROOMS_PAGE_SIZE) - 1;
+        const firstElement = arg.page * ROOMS_PAGE_SIZE;
+        const nextPageFirstElement = (arg.page + 1) * ROOMS_PAGE_SIZE;
+        if (arrayRooms.length == 0 || arg.page > maxPage || arg.page < 0) {
+            socket.emit(ROOMS_LIST, {rooms: roomIds}); 
+            return;
+        }
+        for (let i = firstElement; i < nextPageFirstElement && i < arrayRooms.length; i++) {
+            roomIds.push(arrayRooms[i]);
+        }
+        socket.emit(ROOMS_LIST, {rooms: roomIds}); 
+    })
+
+    socket.on("disconnect", () => {
+        console.log(`User ${socket.id} disconnected`);
     })
 })
 
@@ -84,9 +108,10 @@ const tick = () => {
     lastExecution = newExecutionTime;
     engine.tick(delta);
     for (let [id, room] of rooms) {
-        const gameState = room.getState(engine.playerPositions);
-        if (!gameState) continue;
-        io.to(id).emit(PUBLISH_GAME_STATE, room.getState(engine.playerPositions))
+        const roomState = room.getState(engine.playerPositions);
+        if (!roomState) continue;
+        roomState.time = lastExecution;
+        io.to(id).emit(PUBLISH_GAME_STATE, roomState)
     }
     engine.purgeInputQueue();
 }

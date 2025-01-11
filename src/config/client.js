@@ -41,6 +41,7 @@ export const TEXT_BEVEL_THICKNESS = 0.5;
 export const TEXT_BEVEL_SIZE = 0.1;
 export const TEXT_BEVEL_OFFSET = 0;
 export const TEXT_BEVEL_SEGMENTS = 2;
+export const TEXT_START_SCORE = "0";
 export const AMBIENT_LIGHT_INTENSITY = 1.5;
 export const DIRECTIONAL_LIGHT_INTENSITY = 2;
 export const DIRECTIONAL_LIGHT_MAPSIZE = 1024;

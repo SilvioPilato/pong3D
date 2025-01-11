@@ -1,3 +1,5 @@
+import { KeyboardHandler } from "../../handlers/KeyboardHandler";
+
 export class OnlineInputSystem {
     execute(serverConnection) {
         if (KeyboardHandler.isHold("ArrowUp")) {

@@ -4,8 +4,10 @@ import {
     Color, DirectionalLight,
     Mesh,
     MeshStandardMaterial,
+    PerspectiveCamera,
     PlaneGeometry,
-    SphereGeometry
+    SphereGeometry,
+    Vector3
     } from 'three';
 import {GUI} from "dat.gui";
 import {AudioHandler} from "../handlers/AudioHandler.js";
@@ -30,6 +32,7 @@ import {
     COLOR_DIRECTIONAL_LIGHT,
     COLOR_OUTSIDE,
     COLOR_WALL, 
+    COLOR_FONT,
     MENU_AUDIO_FOLDER,
     MENU_AUDIO_MUTED,
     MENU_AUDIO_VOLUME,
@@ -42,7 +45,30 @@ import {
     POSITION_BOTTOM_WALL, POSITION_OUTSIDE, POSITION_PLAYER_VEC, POSITION_TOP_WALL, 
     POSITION_AI_VEC,
     POSITION_DIRECTIONAL_LIGHT,
+    POSITION_OPPONENT_SCORE,
+    POSITION_PLAYER_SCORE,
+    TEXT_BEVEL_ENABLED,
+    TEXT_BEVEL_OFFSET,
+    TEXT_BEVEL_SEGMENTS,
+    TEXT_BEVEL_SIZE,
+    TEXT_BEVEL_THICKNESS,
+    TEXT_CURVE_SEGMENTS,
+    TEXT_FONT_SIZE,
+    TEXT_HEIGHT,
+    POSITION_COURT,
+    ROTATION_X_ANGLE_COURT,
+    FILE_COURT_MODEL,
+    FILE_FONT,
+    TEXT_START_SCORE,
+    CAMERA_FAR,
+    CAMERA_FOV,
+    CAMERA_NEAR,
+    POSITION_CAMERA,
+    ROTATION_X_ANGLE_CAMERA,
 } from "../../config/client.js";
+import { loadFont, loadGLTF } from './Loaders.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import { degToRad } from 'three/src/math/MathUtils.js';
 
 export function instantiateBall() {
     const sphereGeometry = new SphereGeometry(BALL_RADIUS );
@@ -54,26 +80,35 @@ export function instantiateBall() {
 
 export function instantiateCourt() {
     const outsideGeometry = new PlaneGeometry(OUTSIDE_WIDTH, OUTSIDE_HEIGHT);
-        const outMat = new MeshStandardMaterial({color: COLOR_OUTSIDE});
-        const outside = new Mesh(outsideGeometry, outMat);
-        const horWall = new BoxGeometry(COURT_WIDTH, WALL_HEIGHT,WALL_DEPTH);
-        const wMat = new MeshStandardMaterial({color: COLOR_WALL});
-        const topWall = new Mesh(horWall, wMat);
-        const bottomWall = new Mesh(horWall, wMat);
+    const outMat = new MeshStandardMaterial({color: COLOR_OUTSIDE});
+    const outside = new Mesh(outsideGeometry, outMat);
+    const horWall = new BoxGeometry(COURT_WIDTH, WALL_HEIGHT,WALL_DEPTH);
+    const wMat = new MeshStandardMaterial({color: COLOR_WALL});
+    const topWall = new Mesh(horWall, wMat);
+    const bottomWall = new Mesh(horWall, wMat);
 
-        outside.position.copy(POSITION_OUTSIDE);
-        topWall.position.copy(POSITION_TOP_WALL);
-        bottomWall.position.copy(POSITION_BOTTOM_WALL);
-        outside.receiveShadow = true;
-        outside.castShadow = false;
-        topWall.castShadow = true;
-        bottomWall.castShadow = true;
+    outside.position.copy(POSITION_OUTSIDE);
+    topWall.position.copy(POSITION_TOP_WALL);
+    bottomWall.position.copy(POSITION_BOTTOM_WALL);
+    outside.receiveShadow = true;
+    outside.castShadow = false;
+    topWall.castShadow = true;
+    bottomWall.castShadow = true;
 
-        return {
-            bottomWall,
-            topWall,
-            outside
-        }
+    return {
+        bottomWall,
+        topWall,
+        outside
+    }
+}
+
+export function instantiateTerrain(gltf) {
+    const court = gltf.scene.children[0];
+    court.position.copy(POSITION_COURT);
+    court.rotateOnAxis(new Vector3(1, 0, 0), degToRad(ROTATION_X_ANGLE_COURT));
+    court.receiveShadow = true;
+    court.castShadow = false;
+    return gltf.scene;
 }
 
 export function instantiatePaddles() {
@@ -111,10 +146,6 @@ export function instantiateLights() {
 }
 
 export function setupAudio() {
-    const audio = {
-        [MENU_AUDIO_MUTED]: AUDIO_MUTED,
-        [MENU_AUDIO_VOLUME]: AUDIO_VOLUME,
-    }
     new AudioHandler();
     const ballDrop = new Audio(FILE_AUDIO_WALL_HIT);
     const paddleHit = new Audio(FILE_AUDIO_PADDLE_HIT);
@@ -123,12 +154,45 @@ export function setupAudio() {
     AudioHandler.addTrack(paddleHit, TAG_PADDLE_HIT);
     AudioHandler.addTrack(goal, TAG_GOAL_SCORED);
     AudioHandler.setMuted(AUDIO_MUTED);
-    let gui = new GUI();
-    let audioFolder = gui.addFolder(MENU_AUDIO_FOLDER)
-    audioFolder.add(audio, MENU_AUDIO_MUTED).onChange(value => {
-        AudioHandler.setMuted(value);
-    });
-    audioFolder.add(audio, MENU_AUDIO_VOLUME, 0, 1, 0.05).onChange(value => {
-        AudioHandler.setVolume(value);
-    });
 }
+
+export function instantiateScores(font) {
+    const geometry = new TextGeometry(TEXT_START_SCORE, {
+        font: font,
+        size: TEXT_FONT_SIZE,
+        height: TEXT_HEIGHT,
+        curveSegments: TEXT_CURVE_SEGMENTS,
+        bevelEnabled: TEXT_BEVEL_ENABLED,
+        bevelThickness: TEXT_BEVEL_THICKNESS,
+        bevelSize: TEXT_BEVEL_SIZE,
+        bevelOffset: TEXT_BEVEL_OFFSET,
+        bevelSegments: TEXT_BEVEL_SEGMENTS
+    });
+
+    const mat = new MeshStandardMaterial({ color: new Color(COLOR_FONT) });
+    const playerScore = new Mesh(geometry, mat);
+    const opponentScore = new Mesh(geometry, mat);
+    playerScore.castShadow = true;
+    opponentScore.castShadow = true;
+    playerScore.position.copy(POSITION_PLAYER_SCORE);
+    opponentScore.position.copy(POSITION_OPPONENT_SCORE);
+    return {
+        playerScore,
+        opponentScore
+    };   
+}
+
+export function instantiateExternalResources() {
+    return Promise.all([
+        loadFont(FILE_FONT).then(instantiateScores),
+        loadGLTF(FILE_COURT_MODEL).then(instantiateTerrain),
+    ]);
+}
+
+export function instantiateCamera() {
+    const camera = new PerspectiveCamera(CAMERA_FOV, window.innerWidth / window.innerHeight, CAMERA_NEAR, CAMERA_FAR);
+    camera.rotateOnAxis(new Vector3(1, 0, 0), degToRad(ROTATION_X_ANGLE_CAMERA));
+    camera.position.copy(POSITION_CAMERA);
+    return camera;
+}
+

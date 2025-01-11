@@ -32,3 +32,14 @@ export function AABB(box1, box2) {
         (box1.bottom < box2.top);
 }
 
+export function handleResize(camera, renderer) {
+    return function() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    
+        const pixelRatio = Math.min(window.devicePixelRatio, 2);
+        renderer.setPixelRatio(pixelRatio);
+    }
+}
+

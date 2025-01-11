@@ -1,69 +1,44 @@
 
-import { Vector3, Clock, Box3 } from "three";
-import { Scene } from "three/src/Three.js";
-import { TAG_PLAYER, TAG_OPPONENT, TAG_BALL } from "../../config";
-import { KeyboardHandler } from "../handlers/KeyboardHandler";
+import { Vector3 } from "three";
+import { TAG_PLAYER, TAG_OPPONENT, TAG_BALL, TAG_CAMERA } from "../../config";
 import { AISystem } from "../systems/client/AISystem";
-import { AudioSystem } from "../systems/client/AudioSystem";
 import { BallMovementSystem } from "../systems/client/BallMovementSystem";
 import { OfflinePlayerMovementSystem } from "../systems/client/OfflinePlayerMovementSystem";
 import { ScoreSystem } from "../systems/client/ScoreSystem";
+import { ThreeEngine } from "./ThreeEngine";
 
-export class OfflineEngine {
+export class OfflineEngine extends ThreeEngine {
     renderer = null;
     scene = null;
     camera = null;
     clock = null;
-    // we use tag as component ids
-    playerTag = TAG_PLAYER;
-    opponentTag = TAG_OPPONENT;
-    ballTag = TAG_BALL;
     // components
     threeObjs = new Map();
     ballVelocity = new Vector3(-1, -1, 0);
     // systems
     AISystem = null;
-    BallMoveSystem = null;
+    BallMovementSystem = null;
     ScoreSystem = null;
-    PlayerMoveSystem = null;
+    PlayerMovementSystem = null;
     AudioSystem = null;
 
-    constructor(renderer, camera) {
-        this.scene = new Scene();
-        this.renderer = renderer;
-        this.camera = camera;
-        this.clock = new Clock();
-        new KeyboardHandler();
+    constructor(renderer) {
+        super(renderer);
         this.AISystem = new AISystem();
-        this.BallMoveSystem = new BallMovementSystem();
+        this.BallMovementSystem = new BallMovementSystem();
         this.ScoreSystem = new ScoreSystem();
-        this.PlayerMoveSystem = new OfflinePlayerMovementSystem();
-        this.AudioSystem = new AudioSystem();
-    }
-
-    addPlayer(object) {
-        this.addObject(object, this.playerTag);
-    }
-    addOpponent(object) {
-        this.addObject(object, this.opponentTag);
-    }
-    addBall(object) {
-        this.addObject(object, this.ballTag);
-    }
-    addObject(object, id) {
-        this.scene.add(object);
-        this.threeObjs.set(id, object);
+        this.PlayerMovementSystem = new OfflinePlayerMovementSystem();
     }
 
     tick() {
         if (!this.clock.running) this.clock.start();
         const deltaTime = this.clock.getDelta();
-        this.PlayerMoveSystem.execute(this.threeObjs, deltaTime);
-        this.BallMoveSystem.execute(this.ballVelocity, this.threeObjs, deltaTime);
+        this.PlayerMovementSystem.execute(this.threeObjs, deltaTime);
+        this.BallMovementSystem.execute(this.ballVelocity, this.threeObjs, deltaTime);
         this.AISystem.execute(this.threeObjs, deltaTime);
         this.AudioSystem.execute(this.threeObjs);
         this.ScoreSystem.execute(this.threeObjs, this.ballVelocity);
 
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.scene, this.threeObjs.get(TAG_CAMERA));
     }
 }

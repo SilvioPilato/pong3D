@@ -1,35 +1,36 @@
-import { OfflineGame } from "./OfflineGame";
+import { ThreeEngine } from "./ThreeEngine";
+import { Vector3 } from "three";
 import { OnlineInputSystem } from "../systems/client/OnlineInputSystem";
 import { OnlinePlayerMovementSystem } from "../systems/client/OnlinePlayerMovementSystem";
+import { BallMovementSystem } from "../systems/client/BallMovementSystem"
+import { ROLE_PLAYER_1, ROLE_PLAYER_2, TAG_CAMERA } from "../../config";
 
-export class OnlineEngine extends OfflineGame {
-    serverPositions = new Map();
+export class OnlineEngine extends ThreeEngine {
+    serverPositions = [];
     serverConnection;
+    ballVelocity = new Vector3(-1, -1, 0);
     threeObjs = new Map();
-
+    BallMovementSystem = new BallMovementSystem();
+    
     OnlinePlayerMovementSystem = new OnlinePlayerMovementSystem();
     OnlyneInputSystem = new OnlineInputSystem();
-    constructor(renderer, camera, serverConnection) {
-        this.scene = new Scene();
-        this.renderer = renderer;
-        this.camera = camera;
-        this.clock = new Clock();
-        new KeyboardHandler();
-        this.BallMoveSystem = new BallMovementSystem();
-        this.AudioSystem = new AudioSystem();
+    constructor(renderer, serverConnection) {
+        super(renderer);
         this.serverConnection = serverConnection;
+        this.serverConnection.subscribeToUpdates(this.#updateServerPositions.bind(this));
+    }
+    
+    #updateServerPositions(position) {
+        this.serverPositions.push(position);
     }
 
     tick() {
         if (!this.clock.running) this.clock.start();
         const deltaTime = this.clock.getDelta();
-        // fetch data from IOSink
-        // modify player pos and ballpos accordingly
-
-        this.BallMoveSystem.execute(this.ballVelocity, this.threeObjs, this.colliders, deltaTime);
+        this.BallMovementSystem.execute(this.ballVelocity, this.threeObjs, this.colliders, deltaTime);
         this.AudioSystem.execute(this.threeObjs,this.colliders);
         this.OnlinePlayerMovementSystem.execute(this.serverPositions, this.threeObjs, this.serverConnection.role);
         this.OnlyneInputSystem.execute(this.serverConnection);
-        this.renderer.render( this.scene, this.camera );
+        this.renderer.render( this.scene, this.threeObjs.get(TAG_CAMERA));
     }
 }
