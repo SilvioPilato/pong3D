@@ -18,4 +18,13 @@ export class ThreeEngine {
         this.scene.add(object);
         this.threeObjs.set(id, object);
     }
+
+    loop(running = true) {
+        function gameLoop() {
+            if (!running) return;
+            this.tick();
+            requestAnimationFrame(gameLoop);
+        }
+        return gameLoop();
+    }
 }

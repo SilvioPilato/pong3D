@@ -103,13 +103,12 @@ async function instantiateGameResources() {
 function instantiateSinglePlayerGame(renderer, resources) {
     const engine = new OfflineEngine(renderer);
     addResourcesToEngine(engine, resources);
-    loopEngine(engine);
+    engine.loop();
 }
 
 function instantiateMultiplayerPlayerGame(renderer, resources, serverConnection) {
     const engine = new OnlineEngine(renderer, serverConnection);
     addResourcesToEngine(engine, resources, serverConnection.role);
-    loopEngine(engine);
 }
 
 function setupGUI(resources) {
@@ -134,15 +133,6 @@ function setupGUI(resources) {
 }
 
 
-function loopEngine(engine, running = true) {
-    function loop() {
-        if (!running) return;
-        engine.tick();
-        requestAnimationFrame(loop);
-    }
-    return loop();
-}
-
 function setupSinglePlayer(resources) {
     const singlePlayerButton = document.getElementById("start_single_button");
     singlePlayerButton.onclick = ((e) => {
@@ -161,10 +151,7 @@ async function setupMultiplayer(resources) {
     const roomForm = document.getElementById("room_form");
     serverConnection.subscribeToRooms(console.log);
     serverConnection.requestRooms();
-    serverConnection.subscribeToGameStart((arg) => {
-        console.log("game started", arg);
-        instantiateMultiplayerPlayerGame(renderer, resources, serverConnection)
-    });
+    instantiateMultiplayerPlayerGame(renderer, resources, serverConnection)
 
     joinButton.onclick = ((e) => {
         e.preventDefault();

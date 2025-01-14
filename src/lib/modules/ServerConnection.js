@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { ENQUEUE_ACTION, JOIN_FAILURE, JOIN_ROOM, JOIN_SUCCESS, PUBLISH_GAME_STATE, REQUEST_ROOMS, ROLE_INACTIVE, ROOMS_LIST, START_GAME } from "../../config";
+import { ENQUEUE_ACTION, JOIN_FAILURE, JOIN_ROOM, JOIN_SUCCESS, PUBLISH_GAME_STATE, REQUEST_ROOMS, ROLE_INACTIVE, ROOMS_LIST } from "../../config";
 const DEFAULT_PORT = 8080;
 const DEFAULT_ADDRESS = "ws://localhost";
 export class ServerConnection {
@@ -44,7 +44,7 @@ export class ServerConnection {
 
     subscribeToGameStart(callback) {
         if (!this.socket || !this.socket.connected) return null;
-        this.socket.on(START_GAME, callback);
+
     }
 
     requestRooms(page = 0) {

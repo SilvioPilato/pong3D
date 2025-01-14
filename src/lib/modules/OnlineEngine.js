@@ -3,7 +3,7 @@ import { Vector3 } from "three";
 import { OnlineInputSystem } from "../systems/client/OnlineInputSystem";
 import { OnlinePlayerMovementSystem } from "../systems/client/OnlinePlayerMovementSystem";
 import { BallMovementSystem } from "../systems/client/BallMovementSystem"
-import { ROLE_PLAYER_1, ROLE_PLAYER_2, TAG_CAMERA } from "../../config";
+import { TAG_CAMERA } from "../../config";
 
 export class OnlineEngine extends ThreeEngine {
     serverPositions = [];
@@ -13,15 +13,21 @@ export class OnlineEngine extends ThreeEngine {
     BallMovementSystem = new BallMovementSystem();
     
     OnlinePlayerMovementSystem = new OnlinePlayerMovementSystem();
-    OnlyneInputSystem = new OnlineInputSystem();
+    OnlineInputSystem = new OnlineInputSystem();
     constructor(renderer, serverConnection) {
         super(renderer);
         this.serverConnection = serverConnection;
         this.serverConnection.subscribeToUpdates(this.#updateServerPositions.bind(this));
+        this.serverConnection.subscribeToGameStart(this.#startGame.bind(this));
     }
     
     #updateServerPositions(position) {
         this.serverPositions.push(position);
+    }
+
+    #startGame(args) {
+        console.log("GAME STARTED", args);
+        this.loop();
     }
 
     tick() {
@@ -30,7 +36,7 @@ export class OnlineEngine extends ThreeEngine {
         this.BallMovementSystem.execute(this.ballVelocity, this.threeObjs, this.colliders, deltaTime);
         this.AudioSystem.execute(this.threeObjs,this.colliders);
         this.OnlinePlayerMovementSystem.execute(this.serverPositions, this.threeObjs, this.serverConnection.role);
-        this.OnlyneInputSystem.execute(this.serverConnection);
+        this.OnlineInputSystem.execute(this.serverConnection);
         this.renderer.render( this.scene, this.threeObjs.get(TAG_CAMERA));
     }
 }

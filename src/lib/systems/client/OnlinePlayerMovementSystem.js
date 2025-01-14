@@ -3,7 +3,8 @@ import { lerp } from "three/src/math/MathUtils.js";
 
 export class OnlinePlayerMovementSystem {
     DELAY = 200;
-    execute(serverPositions, threeObjs, playerRole) {
+    serverOrigin = 0;
+    execute(serverPositions, threeObjs, clock) {
         if (!serverPositions || serverPositions.length < 1) return;
         const time = performance.now() - this.DELAY;
         let i = 0;

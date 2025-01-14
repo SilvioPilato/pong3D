@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
         console.log(`User ${socket.id} joined room ${roomId} with role ${userRole}`);
         socket.emit(JOIN_SUCCESS, {role: userRole, roomId, users: room.users });
         if (room.playerOne && room.playerTwo) {
-            io.to(roomId).emit(START_GAME, {roomId, users: room.users, role: userRole});
+            io.to(roomId).emit(START_GAME, {roomId, users: room.users, role: userRole, timeorigin: performance.timeOrigin});
         }
     });
 
