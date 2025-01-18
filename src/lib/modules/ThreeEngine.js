@@ -6,6 +6,7 @@ export class ThreeEngine {
     scene = null;
     clock = null;
     AudioSystem = null;
+    running = true;
     constructor(renderer) {
         this.scene = new Scene();
         this.renderer = renderer;
@@ -19,12 +20,9 @@ export class ThreeEngine {
         this.threeObjs.set(id, object);
     }
 
-    loop(running = true) {
-        function gameLoop() {
-            if (!running) return;
-            this.tick();
-            requestAnimationFrame(gameLoop);
-        }
-        return gameLoop();
+    loop() {
+        if (!this.running) return;
+        this.tick();
+        requestAnimationFrame(this.loop.bind(this));
     }
 }

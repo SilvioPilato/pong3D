@@ -11,11 +11,12 @@ export class ServerPlayerMovementSystem {
             const playerPosition = positions.get(playerId);
             const playerYTopBoundary = playerPosition.y + PLAYER_LEN / 2;
             const playerYBottomBoundary = playerPosition.y - PLAYER_LEN / 2;
+            console.log(deltaTime);
             if (direction == "up" && !(playerYTopBoundary >= this.topWallYBoundary)) {
-                playerPosition.y += PLAYER_SPEED * deltaTime;
+                playerPosition.y += PLAYER_SPEED/100 * deltaTime;
             }
             if (direction == "down" && !(playerYBottomBoundary <= this.bottomWallYBoundary)) {
-                playerPosition.y -= PLAYER_SPEED * deltaTime;
+                playerPosition.y -= PLAYER_SPEED/100 * deltaTime;
             }
         }
     }

@@ -106,9 +106,11 @@ function instantiateSinglePlayerGame(renderer, resources) {
     engine.loop();
 }
 
-function instantiateMultiplayerPlayerGame(renderer, resources, serverConnection) {
+function instantiateMultiplayerPlayerGame(renderer, resources, serverConnection, timeorigin) {
     const engine = new OnlineEngine(renderer, serverConnection);
     addResourcesToEngine(engine, resources, serverConnection.role);
+    engine.servertimeOrigin = timeorigin;
+    engine.loop();
 }
 
 function setupGUI(resources) {
@@ -137,7 +139,7 @@ function setupSinglePlayer(resources) {
     const singlePlayerButton = document.getElementById("start_single_button");
     singlePlayerButton.onclick = ((e) => {
         e.preventDefault();
-        instantiateSinglePlayerGame(renderer, resources);
+        instantiateSinglePlayerGame(resources.renderer, resources);
     })
     singlePlayerButton.disabled = false;
     return resources;
@@ -151,7 +153,7 @@ async function setupMultiplayer(resources) {
     const roomForm = document.getElementById("room_form");
     serverConnection.subscribeToRooms(console.log);
     serverConnection.requestRooms();
-    instantiateMultiplayerPlayerGame(renderer, resources, serverConnection)
+    serverConnection.subscribeToGameStart(({timeorigin}) => instantiateMultiplayerPlayerGame(renderer, resources, serverConnection, timeorigin));
 
     joinButton.onclick = ((e) => {
         e.preventDefault();

@@ -8,10 +8,6 @@ import { ScoreSystem } from "../systems/client/ScoreSystem";
 import { ThreeEngine } from "./ThreeEngine";
 
 export class OfflineEngine extends ThreeEngine {
-    renderer = null;
-    scene = null;
-    camera = null;
-    clock = null;
     // components
     threeObjs = new Map();
     ballVelocity = new Vector3(-1, -1, 0);
@@ -20,7 +16,6 @@ export class OfflineEngine extends ThreeEngine {
     BallMovementSystem = null;
     ScoreSystem = null;
     PlayerMovementSystem = null;
-    AudioSystem = null;
 
     constructor(renderer) {
         super(renderer);

@@ -14,20 +14,19 @@ export class OnlineEngine extends ThreeEngine {
     
     OnlinePlayerMovementSystem = new OnlinePlayerMovementSystem();
     OnlineInputSystem = new OnlineInputSystem();
+
+    servertimeOrigin = null;
+    
     constructor(renderer, serverConnection) {
         super(renderer);
         this.serverConnection = serverConnection;
         this.serverConnection.subscribeToUpdates(this.#updateServerPositions.bind(this));
-        this.serverConnection.subscribeToGameStart(this.#startGame.bind(this));
     }
     
     #updateServerPositions(position) {
+        if (!this.servertimeOrigin) return;
+        position.time -= performance.timeOrigin - this.servertimeOrigin;
         this.serverPositions.push(position);
-    }
-
-    #startGame(args) {
-        console.log("GAME STARTED", args);
-        this.loop();
     }
 
     tick() {
