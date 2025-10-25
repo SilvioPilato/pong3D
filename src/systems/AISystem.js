@@ -1,11 +1,15 @@
-import {TAG_BALL, TAG_BOTTOM_WALL, TAG_OPPONENT, TAG_TOP_WALL} from "../config/index.js";
+import {TAG_BALL, TAG_BOTTOM_WALL, TAG_TOP_WALL} from "../config/index.js";
 
 export class AISystem {
-    agentTag = TAG_OPPONENT;
+    agentTag = null; // Will be set by the Game class
     ballTag = TAG_BALL;
     topWallTag = TAG_TOP_WALL;
     bottomWallTag = TAG_BOTTOM_WALL;
     OPPONENT_SPEED = 6;
+    
+    constructor(aiPlayerTag) {
+        this.agentTag = aiPlayerTag;
+    }
     execute(entities, colliders, deltaTime) {
         const agentEntity = entities.get(this.agentTag);
         const ballEntity = entities.get(this.ballTag);

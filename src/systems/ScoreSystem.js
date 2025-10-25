@@ -1,36 +1,38 @@
 import {Vector3} from "three";
 import {TextGeometry} from "three/addons/geometries/TextGeometry.js";
-import {TAG_BALL, TAG_OPPONENT, TAG_OPPONENT_SCORE, TAG_PLAYER, TAG_PLAYER_SCORE} from "../config/index.js";
+import {TAG_BALL, TAG_OPPONENT_SCORE, TAG_PLAYER_ONE, TAG_PLAYER_SCORE, TAG_PLAYER_TWO} from "../config/index.js";
 
 export class ScoreSystem {
     THRESHOLD = 5;
-    playerScore = 0;
-    opponentScore = 0;
+    playerOneScore = 0;
+    playerTwoScore = 0;
     playerScoreTag = TAG_PLAYER_SCORE;
     opponentScoreTag = TAG_OPPONENT_SCORE;
-    playerTag = TAG_PLAYER;
+    playerOneTag = TAG_PLAYER_ONE;
+    playerTwoTag = TAG_PLAYER_TWO;
     ballTag = TAG_BALL;
-    opponentTag = TAG_OPPONENT;
     resetVelocity = new Vector3(-1,-1,0);
     execute(threeObjs, ballVelocity) {
         const ballThree = threeObjs.get(this.ballTag);
-        const playerThree = threeObjs.get(this.playerTag);
-        const opponentThree = threeObjs.get(this.opponentTag);
+        const playerOneThree = threeObjs.get(this.playerOneTag);
+        const playerTwoThree = threeObjs.get(this.playerTwoTag);
 
-        if (ballThree.position.x < playerThree.position.x - this.THRESHOLD) {
-            this.opponentScore++;
+        // Ball went past player one (left side) - player two scores
+        if (ballThree.position.x < playerOneThree.position.x - this.THRESHOLD) {
+            this.playerTwoScore++;
             this.resetBall(ballThree);
             ballVelocity.x = this.resetVelocity.x;
             ballVelocity.y = this.resetVelocity.y;
-            this.setScoreGeometry(threeObjs.get(this.opponentScoreTag), this.opponentScore.toString());
+            this.setScoreGeometry(threeObjs.get(this.opponentScoreTag), this.playerTwoScore.toString());
         }
 
-        if (ballThree.position.x > opponentThree.position.x + this.THRESHOLD) {
-            this.playerScore++;
+        // Ball went past player two (right side) - player one scores
+        if (ballThree.position.x > playerTwoThree.position.x + this.THRESHOLD) {
+            this.playerOneScore++;
             this.resetBall(ballThree);
             ballVelocity.x = this.resetVelocity.x;
             ballVelocity.y = this.resetVelocity.y;
-            this.setScoreGeometry(threeObjs.get(this.playerScoreTag), this.playerScore.toString());
+            this.setScoreGeometry(threeObjs.get(this.playerScoreTag), this.playerOneScore.toString());
         }
     }
 

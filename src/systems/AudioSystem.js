@@ -2,17 +2,17 @@ import {AudioHandler} from "../AudioHandler.js";
 import {
     TAG_BALL,
     TAG_BOTTOM_WALL, TAG_GOAL_SCORED,
-    TAG_OPPONENT,
     TAG_PADDLE_HIT,
-    TAG_PLAYER,
+    TAG_PLAYER_ONE,
+    TAG_PLAYER_TWO,
     TAG_TOP_WALL,
     TAG_WALL_HIT
 } from "../config/index.js";
 
 export class AudioSystem {
-    opponentTag = TAG_OPPONENT;
+    playerOneTag = TAG_PLAYER_ONE;
+    playerTwoTag = TAG_PLAYER_TWO;
     ballTag = TAG_BALL;
-    playerTag = TAG_PLAYER;
     topWallTag = TAG_TOP_WALL;
     bottomWallTag = TAG_BOTTOM_WALL;
     ballDropId = TAG_WALL_HIT;
@@ -22,13 +22,13 @@ export class AudioSystem {
     execute(threeObjs, colliders) {
         const topWallCollider = colliders.get(this.topWallTag);
         const bottomWallCollider = colliders.get(this.bottomWallTag);
-        const playerCollider = colliders.get(this.playerTag);
-        const opponentCollider = colliders.get(this.opponentTag);
+        const playerOneCollider = colliders.get(this.playerOneTag);
+        const playerTwoCollider = colliders.get(this.playerTwoTag);
         const ballCollider = colliders.get(this.ballTag);
 
         const ballThree = threeObjs.get(this.ballTag);
-        const playerThree = threeObjs.get(this.playerTag);
-        const opponentThree = threeObjs.get(this.opponentTag);
+        const playerOneThree = threeObjs.get(this.playerOneTag);
+        const playerTwoThree = threeObjs.get(this.playerTwoTag);
 
         if (ballCollider.intersectsBox(topWallCollider) ||
             ballCollider.intersectsBox(bottomWallCollider)
@@ -36,14 +36,14 @@ export class AudioSystem {
             AudioHandler.play(this.ballDropId);
         }
 
-        if (ballCollider.intersectsBox(playerCollider) ||
-            ballCollider.intersectsBox(opponentCollider)
+        if (ballCollider.intersectsBox(playerOneCollider) ||
+            ballCollider.intersectsBox(playerTwoCollider)
         ) {
             AudioHandler.play(this.paddleHitId);
         }
 
-        if ((ballThree.position.x > opponentThree.position.x + this.GOAL_THRESHOLD) ||
-            (ballThree.position.x < playerThree.position.x - this.GOAL_THRESHOLD)
+        if ((ballThree.position.x > playerTwoThree.position.x + this.GOAL_THRESHOLD) ||
+            (ballThree.position.x < playerOneThree.position.x - this.GOAL_THRESHOLD)
         ) {
             AudioHandler.play(this.goalScoredId);
         }
