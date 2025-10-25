@@ -102,12 +102,6 @@ export class Game {
         this.setPlayerRoles(this.playerTwoTag, this.playerOneTag);
     }
     
-    // For multiplayer mode where both players are human
-    setBothPlayersHuman() {
-        // In this case, we might need a second PlayerMovementSystem
-        // This would require additional refactoring for multi-input support
-        console.warn("Both players human mode requires additional input handling implementation");
-    }
     addBall(object) {
         this.addObject(object, this.ballTag);
         this.addCollider(object, this.ballTag);
